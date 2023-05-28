@@ -18,14 +18,14 @@ const defaultTheme = createTheme({
 });
 
 const AppRoutes: React.FC = () => {
-  // useEffect(() => {
-  //   const userId = localStorage.getItem("userId");
-  //   const shouldRedirect = !userId && window.location.pathname !== "/";
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    const shouldRedirect = !userId && window.location.pathname !== "/";
 
-  //   if (shouldRedirect) {
-  //     window.location.href = "/";
-  //   }
-  // }, []);
+    if (shouldRedirect) {
+      window.location.href = "/";
+    }
+  }, []);
 
   const renderRoutes = useCallback((objRoute: IRouteConfig[]) => {
     return objRoute.map((r1) => {
