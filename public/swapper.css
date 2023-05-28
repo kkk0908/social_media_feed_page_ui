@@ -1,0 +1,44 @@
+.image-swapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.image-container {
+  width: 500px;
+  height: 300px;
+  overflow: hidden;
+}
+
+.image-wrapper {
+  display: flex;
+  width: calc(100% * 5);
+  height: 100%;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+.image-item {
+  flex: 0 0 20%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.controls {
+  justify-content: space-between;
+  display: flex;
+  inset: 10px;
+  position: absolute;
+  height: 0px;
+  top: 50%;
+}
+
+.controls button {
+  width: 3%;
+  background: aliceblue;
+  padding: 2%;
+}
+
+.controls .MuiSvgIcon-root {
+  color: gray;
+}

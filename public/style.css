@@ -1,0 +1,43 @@
+body {
+  margin: 0px !important;
+  padding: 0px !important;
+}
+
+.flex {
+  display: list-item;
+  justify-content: space-between;
+  align-items: center;
+  height: calc(100vh - 200px);
+  overflow-y: scroll;
+}
+
+.flex-item {
+  width: 90%;
+  margin: 5px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.flex {
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.flex::-webkit-scrollbar {
+  width: 8px;
+}
+
+.flex::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.flex::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 4px;
+}
+
+.flex:hover::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+}
