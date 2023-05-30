@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from "axios";
 import { getCookie } from "../utils/constant";
 
 const Service: AxiosInstance = axios.create({
-  baseURL: "https://media-feed-app.vercel.app", // Replace with your API base URL
+  baseURL: "", // Replace with your API base URL
 });
 
 Service.interceptors.request.use((config) => {
