@@ -33,6 +33,22 @@ const CardComponent: React.FC<any> = (props) => {
     props.deletePost(id);
   };
 
+  const handleDownload = (images: any) => {
+    console.log(">>>>>>>> inside the handledownload");
+    for (let image of images) {
+      downloadPDF(image.file, image._id + ".png");
+    }
+  };
+
+  function downloadPDF(image: string, fileName: string) {
+    const pdfLink = `${image}`;
+    const anchorElement = document.createElement("a");
+    //const fileName = `${fileName}.png`;
+    anchorElement.href = pdfLink;
+    anchorElement.download = fileName;
+    anchorElement.click();
+  }
+
   return (
     <Card className="flex-item">
       <CardHeader
@@ -49,7 +65,7 @@ const CardComponent: React.FC<any> = (props) => {
               <MoreVertIcon />
             </IconButton>
             <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-              <MenuItem onClick={handleMenuClose}>Download</MenuItem>
+              <MenuItem onClick={() => handleDownload(props.card.images)}>Download</MenuItem>
               <MenuItem onClick={handleMenuClose}>Edit</MenuItem>
               <MenuItem onClick={() => handleDeletePost(props.card._id)}>X</MenuItem>
             </Menu>
