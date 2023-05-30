@@ -1,5 +1,5 @@
 import { iNavListItem } from "../interfaces/NavigationInterface";
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import AssignmentIcon from "@mui/icons-material/Assignment";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LayersIcon from "@mui/icons-material/Layers";
@@ -47,20 +47,20 @@ export const mainListItemsArray: iNavListItem[] = [
   },
 ];
 
-export const secondaryListItemsArray : iNavListItem[] = [
+export const secondaryListItemsArray: iNavListItem[] = [
   {
     index: 1,
     title: "Save Reports",
     url: "",
     isSubHeader: true,
-    icon: '',
+    icon: "",
   },
   {
     index: 2,
     title: "Current month",
     url: "",
     isSubHeader: false,
-    icon:  <AssignmentIcon />,
+    icon: <AssignmentIcon />,
   },
   {
     index: 3,
@@ -74,10 +74,40 @@ export const secondaryListItemsArray : iNavListItem[] = [
     title: "Year-end sale",
     url: "",
     isSubHeader: false,
-    icon:  <AssignmentIcon />,
+    icon: <AssignmentIcon />,
   },
 ];
 
 export const APIS = {
-  CUSTOMERS : '/api/customers',
+  CUSTOMERS: "/api/customers",
+};
+
+export function setCookie(name: string, value: string, days: number = 1): void {
+  const expirationDate = new Date();
+  expirationDate.setTime(expirationDate.getTime() + days * 24 * 60 * 60 * 1000);
+  document.cookie = `${name}=${value}; expires=${expirationDate.toUTCString()}; path=/`;
 }
+
+export function getCookie(name: string): string | undefined {
+  const cookieValue: RegExpMatchArray | null = document.cookie.match(
+    `(^|;)\\s*${name}\\s*=\\s*([^;]+)`
+  );
+  return cookieValue ? cookieValue.pop() : undefined;
+}
+
+export const modalType = {
+  AddEditPost: "AddPost",
+  EditPost: "EditPost",
+};
+
+export const progressStatus = {
+  toLoad: "toLoad",
+  loading: "loading",
+  loaded: "loaded",
+};
+
+export const defaultModalData = {
+  open: false,
+  type: "",
+  data: null,
+};
