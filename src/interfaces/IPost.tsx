@@ -12,7 +12,7 @@ interface ITages {
 }
 
 interface IPost {
-  _id: string;
+  _id?: string;
   title?: string;
   contents?: string;
   images?: IImages[];

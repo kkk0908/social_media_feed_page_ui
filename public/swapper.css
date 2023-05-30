@@ -6,7 +6,7 @@
 }
 
 .image-container {
-  width: 500px;
+  width: calc(100% - 5px);
   height: 300px;
   overflow: hidden;
 }
@@ -42,3 +42,4 @@
 .controls .MuiSvgIcon-root {
   color: gray;
 }
+

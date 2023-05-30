@@ -28,7 +28,13 @@ const CardComponent: React.FC<any> = (props) => {
     <Card className="flex-item">
       <CardHeader
         title={
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
             <span style={{ marginRight: "8px" }}>{props.card.title || "Admin"}</span>
             <IconButton onClick={handleMenuClick}>
               <MoreVertIcon />
@@ -40,7 +46,7 @@ const CardComponent: React.FC<any> = (props) => {
         }
       />
       <CardContent style={{ position: "relative" }}>
-        <ImageSwapper />
+        <ImageSwapper images={props.card.images} />
         {props.card.content}
       </CardContent>
       <CardActions disableSpacing>
@@ -64,4 +70,3 @@ const CardComponent: React.FC<any> = (props) => {
 };
 
 export default CardComponent;
-

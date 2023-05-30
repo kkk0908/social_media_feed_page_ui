@@ -1,19 +1,19 @@
 import { IconButton } from "@mui/material";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-const ImageSwapper: React.FC = (props) => {
+const ImageSwapper: React.FC<any> = (props) => {
+  const images: string[] = useMemo(
+    () =>
+      props.onlyImage
+        ? props.images
+        : props.images.map((i: any) => i.file || "").filter((i: string) => i),
+    [props.images, props.onlyImage]
+  );
+
   const [activeIndex, setActiveIndex] = useState(0);
   const [transition, setTransition] = useState(false);
-
-  const images: string[] = [
-    "https://via.placeholder.com/500",
-    "https://picsum.photos/500/300",
-    "https://source.unsplash.com/random/500x300",
-    "https://loremflickr.com/500/300",
-    "https://placeimg.com/500/300/any",
-  ];
 
   const handlePrev = () => {
     setTransition(true);
@@ -42,22 +42,24 @@ const ImageSwapper: React.FC = (props) => {
       <div className="image-container">
         <div className="image-wrapper" style={imageStyles} onTransitionEnd={handleTransitionEnd}>
           {images.map((image, index) => (
-            <img key={index} src={image} alt={`Image ${index + 1}`} className="image-item" />
+            // eslint-disable-next-line jsx-a11y/img-redundant-alt
+            <img key={index + 1} src={image} alt={`Image ${index + 1}`} className="image-item" />
           ))}
         </div>
       </div>
-      <div className="controls">
-        <IconButton onClick={handlePrev} disabled={isFirstImage}>
-          <ChevronLeftIcon />
-        </IconButton>
+      {images.length > 1 && (
+        <div className="controls">
+          <IconButton onClick={handlePrev} disabled={isFirstImage}>
+            <ChevronLeftIcon />
+          </IconButton>
 
-        <IconButton onClick={handleNext} disabled={isLastImage}>
-          <ChevronRightIcon />
-        </IconButton>
-      </div>
+          <IconButton onClick={handleNext} disabled={isLastImage}>
+            <ChevronRightIcon />
+          </IconButton>
+        </div>
+      )}
     </div>
   );
 };
 
 export default ImageSwapper;
-

@@ -1,103 +1,92 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import CardComponent from "../../common/CardComponent";
-import { Grid } from "@mui/material";
-import { makeStyles } from "@material-ui/core";
+
 import { getPosts } from "../../../services/post";
-
-const useStyles = makeStyles((theme) => ({
-  hiddenOnXSAndSM: {
-    [theme.breakpoints.down("sm")]: {
-      display: "none",
-    },
-  },
-}));
-
-// const data = [
-//   {
-//     id: 1,
-//     title: "Card 1",
-//     images: [
-//       "https://via.placeholder.com/500",
-//       "https://picsum.photos/500/300",
-//       "https://source.unsplash.com/random/500x300",
-//     ],
-//   },
-//   {
-//     id: 2,
-//     title: "Card 2",
-//     images: ["https://loremflickr.com/500/300", "https://placeimg.com/500/300/any"],
-//   },
-//   {
-//     id: 3,
-//     title: "Card 3",
-//     images: ["https://source.unsplash.com/random/500x300"],
-//   },
-//   {
-//     id: 1,
-//     title: "Card 1",
-//     images: [
-//       "https://via.placeholder.com/500",
-//       "https://picsum.photos/500/300",
-//       "https://source.unsplash.com/random/500x300",
-//     ],
-//   },
-//   {
-//     id: 2,
-//     title: "Card 2",
-//     images: ["https://loremflickr.com/500/300", "https://placeimg.com/500/300/any"],
-//   },
-//   {
-//     id: 3,
-//     title: "Card 3",
-//     images: ["https://source.unsplash.com/random/500x300"],
-//   },
-// ];
+import { IPost } from "../../../interfaces/IPost";
+import { Button, Grid, Modal } from "@mui/material";
+import CreateEditPost from "./CreateEditPost";
+import { defaultModalData, modalType, progressStatus } from "../../../utils/constant";
 
 const Feeds: React.FC = () => {
-  const [datas, setData] = useState([]);
-  const classes = useStyles();
+  const [postArray, setPostArray] = useState([]);
+  const [loading, setLoading] = useState(progressStatus.toLoad);
+  const [resStatus, setResStatus] = useState({
+    status: false,
+    message: "",
+  });
 
-  const getAllPosts = () => {
-    getPosts()
-      .then((data) => {
-        console.log(data);
-        setData(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  const [modalData, setModalData] = useState<any>(defaultModalData);
+
+  const getAllPostFn = useCallback(async () => {
+    setLoading(progressStatus.loading);
+
+    const { status, data, message } = await getPosts();
+    setPostArray(data);
+    setLoading(progressStatus.loaded);
+
+    if (!status) {
+      setResStatus({ status, message });
+    }
+  }, []);
 
   useEffect(() => {
-    getAllPosts();
+    getAllPostFn();
+  }, [getAllPostFn]);
+
+  const handleAddPostClick = useCallback(() => {
+    setModalData({ open: true, type: modalType.AddEditPost, data: null });
   }, []);
+
+  const handleClose = useCallback(() => {
+    setModalData(defaultModalData);
+  }, []);
+
+  const renderModal = useMemo(() => {
+    let commonProps = {
+      handleClose,
+      modalData,
+      setModalData,
+      resStatus,
+      getAllPostFn,
+    };
+    const modals = {
+      [modalType.AddEditPost]: <CreateEditPost {...commonProps} />,
+    };
+
+    return modals?.[modalData.type] || null;
+  }, [getAllPostFn, handleClose, modalData, resStatus]);
 
   return (
     <>
-      <Grid container spacing={2} style={{ height: "calc(100vh - 4em)" }}>
-        <Grid
-          item
-          xs={12}
-          sm={2}
-          style={{ borderRight: "1px solid #e2dddd" }}
-          className={classes.hiddenOnXSAndSM}
-        >
-          <div>Grid Item 2 (Hidden on xs and sm)</div>
-        </Grid>
-        <Grid className="flex" item xs={12} sm={5}>
-          <div>
-            {datas.map((card, i) => (
-              <CardComponent key={i} card={card} />
-            ))}
-          </div>
-        </Grid>
-        <Grid item xs={12} sm={4} className={classes.hiddenOnXSAndSM}>
-          HI
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Grid container justifyContent="flex-end">
+            <Button variant="contained" color="primary" onClick={handleAddPostClick}>
+              Add Post
+            </Button>
+          </Grid>
         </Grid>
       </Grid>
+      {loading !== progressStatus.loaded ? (
+        "Loading..."
+      ) : (
+        <div className="flex">
+          {postArray?.map((post: IPost) => <CardComponent key={post._id} card={post} />) || null}
+        </div>
+      )}
+
+      {modalData.open ? (
+        <Modal
+          open={modalData.open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          {renderModal}
+        </Modal>
+      ) : null}
     </>
   );
 };
 
 export default Feeds;
-

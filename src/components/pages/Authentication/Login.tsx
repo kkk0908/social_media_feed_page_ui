@@ -15,17 +15,33 @@ import Container from "@mui/material/Container";
 import { useNavigate } from "react-router-dom";
 import { routeLink } from "../../../AppRoutes/routeConstant";
 import Copyright from "../../common/Copyright";
+import { login } from "../../../services/user";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+
+  const handleSubmit = useCallback(
+    async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+
+      try {
+        const res = await login({
+          email: data.get("email") as string,
+          password: data.get("password") as string,
+        });
+
+        if (res) {
+          navigate(routeLink.Home);
+          window.location.reload();
+        }
+      } catch (error) {
+        // Handle login error
+        console.error("Login failed:", error);
+      }
+    },
+    [navigate]
+  );
 
   const handleResetPassword = useCallback(() => {
     navigate(routeLink.ForgetPassword);
