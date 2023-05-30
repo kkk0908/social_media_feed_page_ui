@@ -12,6 +12,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import SaveIcon from "@mui/icons-material/Save";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ImageSwapper from "./ImageSwapper";
+import { FacebookShareButton, TwitterShareButton } from "react-share";
 
 const CardComponent: React.FC<any> = (props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -22,6 +23,14 @@ const CardComponent: React.FC<any> = (props) => {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleClick = (id: string, type: string) => {
+    props.parentFunction(id, type);
+  };
+
+  const handleDeletePost = (id: string) => {
+    props.deletePost(id);
   };
 
   return (
@@ -41,6 +50,8 @@ const CardComponent: React.FC<any> = (props) => {
             </IconButton>
             <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
               <MenuItem onClick={handleMenuClose}>Download</MenuItem>
+              <MenuItem onClick={handleMenuClose}>Edit</MenuItem>
+              <MenuItem onClick={() => handleDeletePost(props.card._id)}>X</MenuItem>
             </Menu>
           </div>
         }
@@ -50,19 +61,26 @@ const CardComponent: React.FC<any> = (props) => {
         {props.card.content}
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton>
+        <IconButton onClick={() => handleClick(props.card._id, "like")}>
           <FavoriteIcon />
+          <span> {props.card.likesCount}</span>
         </IconButton>
         <IconButton>
           <CommentIcon />
         </IconButton>
-        <IconButton>
-          <ShareIcon />
+        <IconButton onClick={() => handleClick(props.card._id, "share")}>
+          <FacebookShareButton
+            url={"https://www.linkedin.com/feed/update/urn:li:share:7068814009013084160/"}
+          >
+            {props.card.shareCount}
+            <ShareIcon />
+          </FacebookShareButton>
         </IconButton>
         <div style={{ flexGrow: 1 }} />
 
-        <IconButton>
+        <IconButton onClick={() => handleClick(props.card._id, "save")}>
           <SaveIcon />
+          <span> {props.card.saveCount}</span>
         </IconButton>
       </CardActions>
     </Card>
@@ -70,3 +88,4 @@ const CardComponent: React.FC<any> = (props) => {
 };
 
 export default CardComponent;
+

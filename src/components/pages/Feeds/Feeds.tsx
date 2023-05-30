@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import CardComponent from "../../common/CardComponent";
 
-import { getPosts } from "../../../services/post";
+import { getPosts, postActivites, deletePostById } from "../../../services/post";
 import { IPost } from "../../../interfaces/IPost";
 import { Button, Grid, Modal } from "@mui/material";
 import CreateEditPost from "./CreateEditPost";
@@ -28,6 +28,18 @@ const Feeds: React.FC = () => {
       setResStatus({ status, message });
     }
   }, []);
+
+  const postActivities = async (postId: string, type: string) => {
+    let result = await postActivites(postId, type);
+    console.log(">>>>>>>> inside the post activities", result);
+  };
+
+  const deletePost = async (postId: string) => {
+    console.log(">>>>>>>>inside delete post");
+    let result = await deletePostById(postId);
+    console.log(">>>>>>>> inside the delete post ", result);
+    getAllPostFn();
+  };
 
   useEffect(() => {
     getAllPostFn();
@@ -71,7 +83,14 @@ const Feeds: React.FC = () => {
         "Loading..."
       ) : (
         <div className="flex">
-          {postArray?.map((post: IPost) => <CardComponent key={post._id} card={post} />) || null}
+          {postArray?.map((post: IPost) => (
+            <CardComponent
+              key={post._id}
+              card={post}
+              parentFunction={postActivities}
+              deletePost={deletePost}
+            />
+          )) || null}
         </div>
       )}
 
@@ -90,3 +109,4 @@ const Feeds: React.FC = () => {
 };
 
 export default Feeds;
+
