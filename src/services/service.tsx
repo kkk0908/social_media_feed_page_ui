@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from "axios";
 import { getCookie } from "../utils/constant";
 
 const Service: AxiosInstance = axios.create({
-  baseURL: "", // Replace with your API base URL
+  baseURL: "http://65.2.140.152:4000", // Replace with your API base URL
 });
 
 Service.interceptors.request.use((config) => {
